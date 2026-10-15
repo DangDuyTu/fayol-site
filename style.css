@@ -128,9 +128,10 @@ h1, h2, h3 { color: var(--text); }
     gap: 16px;
     padding-block: 16px;
 }
-/* Logo ngang có lề trong bằng 1/8 chiều cao: kéo sang trái đúng phần đó để biểu tượng thẳng mép nội dung. */
+/* Logo ngang có lề trong bằng 0.162 chiều cao (35 / 216.44): kéo sang trái đúng phần đó để biểu tượng thẳng mép nội dung.
+   max-width: none - lề âm làm khung bọc hẹp hơn ảnh, luật img chung (max-width: 100%) sẽ thu logo nhỏ lại. */
 .brand { display: inline-flex; flex: none; --logo-h: 48px; }
-.brand img { height: var(--logo-h); width: auto; margin-left: calc(var(--logo-h) * -0.162); }
+.brand img { height: var(--logo-h); width: auto; max-width: none; margin-left: calc(var(--logo-h) * -0.162); }
 .nav {
     display: flex;
     flex-wrap: wrap;
