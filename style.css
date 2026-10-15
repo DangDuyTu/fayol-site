@@ -130,7 +130,7 @@ h1, h2, h3 { color: var(--text); }
 }
 /* Logo ngang có lề trong bằng 1/8 chiều cao: kéo sang trái đúng phần đó để biểu tượng thẳng mép nội dung. */
 .brand { display: inline-flex; flex: none; --logo-h: 48px; }
-.brand img { height: var(--logo-h); width: auto; margin-left: calc(var(--logo-h) * -0.125); }
+.brand img { height: var(--logo-h); width: auto; margin-left: calc(var(--logo-h) * -0.162); }
 .nav {
     display: flex;
     flex-wrap: wrap;
