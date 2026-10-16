@@ -392,6 +392,33 @@ h1, h2, h3 { color: var(--text); }
 .trust h3 { font-size: 16.5px; margin: 2px 0 4px; }
 .trust p { margin: 0; color: var(--text-2); font-size: 15px; line-height: 1.55; }
 
+/* (3) Khó làm sai dùng .trust 4 cột; (4) ba ý về AI dưới ảnh - .trust-3 trong khung; (5) năm thẻ đang làm - .cards-3; (8) hai cam kết - .trust-2.
+   Đặt trước các @media: ở màn hẹp luật .trust / .cards của @media (sau, cùng độ ưu tiên) thắng */
+.trust-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.trust-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Năm thẻ: ba trên, hai dưới canh giữa (flex thay grid) */
+.cards-3 { display: flex; flex-wrap: wrap; justify-content: center; }
+.cards-3 > .card { flex: 0 1 calc((100% - 32px) / 3); }
+.ai-terms {
+    margin-top: 56px;
+    padding: 24px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+}
+.pledges {
+    padding: 22px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+}
+.section .pledges h2 {
+    margin: 0 0 16px;
+    font-size: 15px;
+    letter-spacing: 0;
+    color: var(--text-2);
+}
+
 /* (6) Hỏi đáp - details / summary, không JavaScript */
 #hoi-dap h2 { text-align: center; margin-bottom: 28px; }
 .faq {
@@ -509,6 +536,7 @@ h1, h2, h3 { color: var(--text); }
     .tiles,
     .cards,
     .trust { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cards-3 > .card { flex-basis: calc((100% - 16px) / 2); }
     .feature,
     .feature-flip { grid-template-columns: minmax(0, 1fr); gap: 24px; }
     .feature-flip .feature-text { order: 0; }
@@ -543,6 +571,7 @@ h1, h2, h3 { color: var(--text); }
     .tile p { font-size: 14px; }
     .cards,
     .trust { grid-template-columns: minmax(0, 1fr); }
+    .cards-3 > .card { flex-basis: 100%; }
     .faq summary { padding: 16px 18px; }
     .faq details p { padding: 0 18px 18px; }
 }
