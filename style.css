@@ -1,10 +1,11 @@
-/* fayol.vn - trang tĩnh, không JavaScript, không font hay script bên ngoài. Sáng / tối theo hệ điều hành. */
+/* fayol.vn - trang tĩnh, không JavaScript, không font hay script bên ngoài. Sáng / tối theo hệ điều hành.
+   D-531: khung Odoo (một câu mạnh + lưới phân hệ, thoáng, ít chữ) + ba mục kiểu AMIS (phân hệ theo cách gọi của doanh nghiệp Việt, app di động, AI). */
 
 :root {
     color-scheme: light dark;
     --bg: #f6f8fc;
+    --bg-alt: #eef2f9;
     --surface: #ffffff;
-    --surface-2: #eef2f9;
     --text: #0b1f4b;
     --text-2: #4a5878;
     --border: #dde3ee;
@@ -13,12 +14,17 @@
     --cta: #f59e0b;
     --cta-hover: #e08e00;
     --cta-text: #0b1f4b;
-    --marker: #0f766e;
+    --mark: rgba(245, 158, 11, 0.32);
     --focus: #2563eb;
     --chip-soon-bg: #e3ecff;
     --chip-soon-text: #1e3fae;
     --chip-beta-bg: #fff1d6;
     --chip-beta-text: #8a4600;
+    /* Bốn sắc của ô phân hệ - chỉ nền ô biểu tượng + màu nét, chữ luôn --text */
+    --hue-1-bg: #e4ebfb; --hue-1: #1b3a8a;
+    --hue-2-bg: #d9f1ec; --hue-2: #0f766e;
+    --hue-3-bg: #fdefd2; --hue-3: #b45309;
+    --hue-4-bg: #fbe3e8; --hue-4: #be123c;
     --glow: rgba(27, 58, 138, 0.09);
     --shadow: 0 1px 2px rgba(11, 31, 75, 0.04), 0 12px 32px -18px rgba(11, 31, 75, 0.22);
 }
@@ -27,8 +33,8 @@
 @media (prefers-color-scheme: dark) {
     :root {
         --bg: #0a1020;
+        --bg-alt: #0e172b;
         --surface: #111a2e;
-        --surface-2: #16213a;
         --text: #e8edf7;
         --text-2: #a9b4cc;
         --border: #26324d;
@@ -37,12 +43,16 @@
         --cta: #f59e0b;
         --cta-hover: #fbb13c;
         --cta-text: #0b1f4b;
-        --marker: #2dd4bf;
+        --mark: rgba(245, 158, 11, 0.38);
         --focus: #9dbbff;
         --chip-soon-bg: #1b2c55;
         --chip-soon-text: #bcd0ff;
         --chip-beta-bg: #3b2a0a;
         --chip-beta-text: #fcd38d;
+        --hue-1-bg: #1a2a52; --hue-1: #a9c2ff;
+        --hue-2-bg: #0f3a36; --hue-2: #5eead4;
+        --hue-3-bg: #3d2a08; --hue-3: #fcd38d;
+        --hue-4-bg: #44121f; --hue-4: #fda4af;
         --glow: rgba(45, 212, 191, 0.07);
         --shadow: none;
     }
@@ -72,6 +82,7 @@ body {
 }
 
 img { display: block; max-width: 100%; height: auto; }
+svg { display: block; }
 
 a {
     color: var(--primary);
@@ -79,7 +90,8 @@ a {
     text-underline-offset: 3px;
 }
 a:hover { color: var(--primary-hover); }
-a:focus-visible {
+a:focus-visible,
+summary:focus-visible {
     outline: 3px solid var(--focus);
     outline-offset: 3px;
     border-radius: 6px;
@@ -115,10 +127,11 @@ h1, h2, h3 { color: var(--text); }
 
 .wrap {
     width: 100%;
-    max-width: 1040px;
+    max-width: 1120px;
     margin: 0 auto;
     padding-inline: 16px;
 }
+.wrap-narrow { max-width: 820px; }
 
 /* Thanh trên */
 .site-header .wrap {
@@ -126,7 +139,7 @@ h1, h2, h3 { color: var(--text); }
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding-block: 16px;
+    padding-block: 14px;
 }
 /* Logo ngang có lề trong bằng 0.162 chiều cao (35 / 216.44): kéo sang trái đúng phần đó để biểu tượng thẳng mép nội dung.
    max-width: none - lề âm làm khung bọc hẹp hơn ảnh, luật img chung (max-width: 100%) sẽ thu logo nhỏ lại. */
@@ -137,7 +150,7 @@ h1, h2, h3 { color: var(--text); }
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
-    gap: 4px 20px;
+    gap: 4px 22px;
     font-size: 15px;
     font-weight: 500;
 }
@@ -147,37 +160,56 @@ h1, h2, h3 { color: var(--text); }
     padding: 6px 0;
 }
 .nav a:hover { color: var(--text); }
-.nav .nav-login {
-    color: var(--primary);
-    border: 1px solid var(--border);
+.nav .nav-login,
+.nav .nav-try {
     border-radius: 10px;
     padding: 6px 14px;
-    background: var(--surface);
+    font-weight: 600;
 }
+.nav .nav-login { color: var(--primary); border: 1px solid var(--border); background: var(--surface); }
 .nav .nav-login:hover { color: var(--primary-hover); border-color: var(--primary); }
+.nav .nav-try { color: var(--cta-text); background: var(--cta); border: 1px solid var(--cta); }
+.nav .nav-try:hover { color: var(--cta-text); background: var(--cta-hover); border-color: var(--cta-hover); }
 
-/* Phần đầu */
+/* (1) Phần đầu - một câu mạnh */
 /* Lớp trên cùng phủ màu nền ở mép trên: vầng sáng không tạo vạch ngang dưới thanh trên (và không lộ khung nền của logo tối). */
 .hero {
     background:
         linear-gradient(to bottom, var(--bg), transparent 40%),
         radial-gradient(70% 85% at 50% 35%, var(--glow), transparent 72%);
     text-align: center;
-    padding: 56px 0 48px;
+    padding: 64px 0 40px;
+}
+.eyebrow {
+    display: inline-block;
+    margin: 0 0 18px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--chip-soon-bg);
+    color: var(--chip-soon-text);
+    font-size: 14px;
+    font-weight: 600;
 }
 .hero h1 {
-    font-size: clamp(30px, 4.2vw + 12px, 48px);
-    line-height: 1.22;
-    letter-spacing: -0.02em;
-    max-width: 17em;
-    margin: 0 auto 18px;
+    font-size: clamp(32px, 4.6vw + 12px, 56px);
+    line-height: 1.16;
+    letter-spacing: -0.025em;
+    max-width: 15em;
+    margin: 0 auto 20px;
     text-wrap: balance;
 }
+/* Nét bút dạ quang dưới phần nhấn (kiểu Odoo) - chỉ là nền, không đổi màu chữ */
+.mark {
+    background: linear-gradient(to top, var(--mark) 0.36em, transparent 0.36em);
+    padding-inline: 0.06em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
 .lead {
-    font-size: clamp(17px, 0.5vw + 15px, 19px);
+    font-size: clamp(17px, 0.6vw + 15px, 20px);
     color: var(--text-2);
-    max-width: 38em;
-    margin: 0 auto 28px;
+    max-width: 36em;
+    margin: 0 auto 30px;
     text-wrap: pretty;
 }
 .actions {
@@ -190,11 +222,11 @@ h1, h2, h3 { color: var(--text); }
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    padding: 0 22px;
+    min-height: 50px;
+    padding: 0 28px;
     border: 1px solid transparent;
     border-radius: 12px;
-    font-size: 16px;
+    font-size: 16.5px;
     font-weight: 600;
     line-height: 1.3;
     text-decoration: none;
@@ -203,173 +235,247 @@ h1, h2, h3 { color: var(--text); }
 .btn-primary { background: var(--cta); border-color: var(--cta); color: var(--cta-text); }
 .btn-primary:hover { background: var(--cta-hover); border-color: var(--cta-hover); color: var(--cta-text); }
 .btn-secondary { background: var(--surface); border-color: var(--primary); color: var(--primary); }
-.btn-secondary:hover { background: var(--surface-2); color: var(--primary-hover); }
+.btn-secondary:hover { background: var(--bg-alt); color: var(--primary-hover); }
 .note {
     font-size: 14.5px;
     color: var(--text-2);
     margin: 16px auto 0;
 }
 
-/* Các phần */
-.section { padding: 16px 0 40px; }
+/* Các mục */
+.section { padding: 56px 0; }
+.section-tight { padding: 16px 0 32px; }
+.section-alt { background: var(--bg-alt); }
 .section h2 {
-    font-size: clamp(24px, 1.2vw + 19px, 30px);
-    line-height: 1.25;
-    letter-spacing: -0.01em;
-    margin: 0 0 20px;
+    font-size: clamp(26px, 1.6vw + 19px, 36px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin: 0 0 10px;
+    text-wrap: balance;
+}
+.section-head {
+    text-align: center;
+    max-width: 44em;
+    margin: 0 auto 36px;
+}
+.section-head p { color: var(--text-2); font-size: 17.5px; margin: 0; }
+.section-foot {
+    text-align: center;
+    color: var(--text-2);
+    font-size: 15px;
+    margin: 28px auto 0;
+    max-width: 46em;
 }
 
-.products {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-}
-.product {
-    display: flex;
-    flex-direction: column;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 24px;
-    box-shadow: var(--shadow);
-}
-.product-head {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 16px;
-}
-.product-head img { width: 52px; height: 52px; flex: none; }
-.product-title {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4px 10px;
-}
-.product h3 {
-    font-size: 21px;
-    line-height: 1.3;
-    margin: 0;
-}
 .chip {
     display: inline-flex;
     align-items: center;
     padding: 2px 10px;
     border-radius: 999px;
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 600;
     line-height: 1.6;
     white-space: nowrap;
 }
 .chip-soon { background: var(--chip-soon-bg); color: var(--chip-soon-text); }
 .chip-beta { background: var(--chip-beta-bg); color: var(--chip-beta-text); }
-.product-lead { font-weight: 600; margin: 0 0 10px; }
-.product ul {
-    color: var(--text-2);
-    margin: 0 0 20px;
-    padding-left: 1.2em;
-}
-.product li { margin-bottom: 6px; }
-.product li::marker { color: var(--marker); }
-.product-foot {
-    margin: auto 0 0;
-    padding-top: 14px;
-    border-top: 1px solid var(--border);
-    color: var(--text-2);
-    font-size: 15px;
-}
 
-/* Một sản phẩm chính (Fayol Enterprise) - thẻ rộng hết hàng, thẳng mép hai khung bên dưới; Fayol Auto chỉ là một dòng ở mục nhỏ "Tiện ích" -
-   không thẻ ngang hàng. */
-.products-one { grid-template-columns: minmax(0, 1fr); }
+.hue-1 { --ic-bg: var(--hue-1-bg); --ic: var(--hue-1); }
+.hue-2 { --ic-bg: var(--hue-2-bg); --ic: var(--hue-2); }
+.hue-3 { --ic-bg: var(--hue-3-bg); --ic: var(--hue-3); }
+.hue-4 { --ic-bg: var(--hue-4-bg); --ic: var(--hue-4); }
+
+/* (2) Lưới phân hệ */
+.tiles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+.tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px 20px 20px;
+    box-shadow: var(--shadow);
+}
+.tile-ic,
+.feature-ic,
+.card-ic {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--ic-bg);
+    color: var(--ic);
+}
+.tile-ic { margin-bottom: 14px; }
+.tile-ic svg,
+.feature-ic svg,
+.card-ic svg { width: 26px; height: 26px; fill: currentColor; }
+.tile h3 { font-size: 18px; line-height: 1.3; margin: 0 0 6px; }
+.tile p { margin: 0; color: var(--text-2); font-size: 15px; line-height: 1.55; }
+
+/* (3) Trợ lý AI - chữ một bên, ảnh minh họa 16:10 một bên (SVG của chủ dự án, bản tối đổi theo hệ điều hành); hàng sau đổi phía */
+.feature {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 48px;
+    align-items: center;
+}
+.feature + .feature { margin-top: 64px; }
+.feature-flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+.feature-flip .feature-text { order: 2; }
+.feature-ic { margin-bottom: 16px; }
+.feature h3 { font-size: clamp(22px, 0.8vw + 18px, 27px); line-height: 1.25; margin: 0 0 12px; }
+.feature p { color: var(--text-2); font-size: 17px; margin: 0 0 12px; }
+.feature .feature-note { font-size: 15px; }
+.shot { margin: 0; }
+.shot img { width: 100%; border-radius: 16px; }
+
+/* (4) App di động */
+.cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px 20px;
+    box-shadow: var(--shadow);
+}
+.card-ic { margin-bottom: 14px; }
+.card h3 { font-size: 18px; line-height: 1.3; margin: 0 0 6px; }
+.card .chip { margin-bottom: 8px; }
+.card p { margin: 0; color: var(--text-2); font-size: 15px; line-height: 1.55; }
+
+/* (5) Tài khoản an toàn */
+.trust {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+}
+.trust li { display: flex; gap: 14px; align-items: flex-start; }
+.trust-ic {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--primary);
+}
+.trust-ic svg { width: 22px; height: 22px; fill: currentColor; }
+.trust h3 { font-size: 16.5px; margin: 2px 0 4px; }
+.trust p { margin: 0; color: var(--text-2); font-size: 15px; line-height: 1.55; }
+
+/* (6) Hỏi đáp - details / summary, không JavaScript */
+#hoi-dap h2 { text-align: center; margin-bottom: 28px; }
+.faq {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+}
+.faq details + details { border-top: 1px solid var(--border); }
+.faq summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    font-weight: 600;
+    font-size: 16.5px;
+    cursor: pointer;
+    list-style: none;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+    content: "";
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--text-2);
+    border-bottom: 2px solid var(--text-2);
+    transform: translateY(-3px) rotate(45deg);
+}
+.faq details[open] summary::after { transform: translateY(2px) rotate(-135deg); }
+.faq details p { margin: 0; padding: 0 22px 20px; color: var(--text-2); }
+
+/* (7) Tiện ích - mục nhỏ, không thẻ ngang hàng (D-529) */
 .utility {
-    margin-top: 16px;
     padding: 14px 18px;
     border: 1px dashed var(--border);
     border-radius: 14px;
     color: var(--text-2);
     font-size: 15px;
 }
-.utility h3 {
+.section .utility h2 {
     margin: 0 0 4px;
     font-size: 15px;
+    letter-spacing: 0;
 }
 .utility p { margin: 0; }
 .utility strong { color: var(--text); }
 
-.split {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-}
-.panel {
-    background: var(--surface-2);
-    border-radius: 20px;
-    padding: 24px;
-}
-.panel h2 {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 22px;
-    margin: 0 0 12px;
-}
-.ic {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 38px;
-    height: 38px;
-    border-radius: 11px;
-    background: var(--surface);
-    color: var(--primary);
-}
-.ic svg { width: 20px; height: 20px; fill: currentColor; }
-.panel p { color: var(--text-2); margin: 0 0 10px; }
-.panel p:last-child { margin-bottom: 0; }
-.facts {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 6px 16px;
-    margin: 14px 0 0;
-}
-.facts dt { color: var(--text-2); }
-.facts dd { margin: 0; font-weight: 600; }
-
-.panel-en {
+.english {
     background: var(--surface);
     border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 22px 24px;
 }
-.panel-en ul {
-    color: var(--text-2);
-    margin: 0 0 10px;
-    padding-left: 1.2em;
-}
-.panel-en li { margin-bottom: 6px; }
-.panel-en li::marker { color: var(--marker); }
-.panel-en strong { color: var(--text); }
+.section .english h2 { font-size: 20px; margin: 0 0 10px; }
+.english p { color: var(--text-2); margin: 0 0 10px; }
+.english p:last-child { margin-bottom: 0; }
+.english strong { color: var(--text); }
 
-/* Chân trang */
+/* (8) Chân trang - công ty + mã số thuế (D-530) */
 .site-footer {
     border-top: 1px solid var(--border);
-    margin-top: 16px;
-    padding: 24px 0 40px;
+    padding: 32px 0 40px;
     color: var(--text-2);
-    font-size: 14px;
+    font-size: 14.5px;
 }
 .site-footer .wrap {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 8px 24px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px 32px;
+    align-items: start;
 }
-.site-footer p { margin: 0; }
+.footer-co p { margin: 0 0 4px; }
+.footer-co strong { color: var(--text); }
+.footer-logo { height: 38px; width: auto; max-width: none; margin: 0 0 10px -6px; }
+.footer-logo-dark { display: none; }
+@media (prefers-color-scheme: dark) {
+    .footer-logo-light { display: none; }
+    .footer-logo-dark { display: block; }
+}
 .site-footer a { color: var(--text-2); }
 .site-footer a:hover { color: var(--text); }
 .footer-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 20px;
+    display: grid;
+    gap: 6px;
+    justify-items: start;
+}
+.footer-note {
+    grid-column: 1 / -1;
+    margin: 8px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px;
 }
 
 /* Trang 404 */
@@ -389,28 +495,48 @@ h1, h2, h3 { color: var(--text); }
 }
 .notfound p { color: var(--text-2); margin: 0 0 20px; }
 
+@media (max-width: 960px) {
+    .tiles,
+    .cards,
+    .trust { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .feature,
+    .feature-flip { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .feature-flip .feature-text { order: 0; }
+    .feature-text { max-width: 40em; }
+}
+
 @media (max-width: 760px) {
-    .products,
-    .split { grid-template-columns: 1fr; }
+    .nav .nav-wide { display: none; }
+    .site-footer .wrap { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 560px) {
-    .site-header .wrap { padding-block: 12px; gap: 12px; }
+    .site-header .wrap { padding-block: 12px; gap: 10px; }
     .brand { --logo-h: 38px; }
-    .nav { gap: 4px 14px; }
-    .nav .nav-wide { display: none; }
-    .hero { padding: 32px 0 36px; }
+    .nav { gap: 4px 8px; font-size: 14.5px; }
+    .nav .nav-login,
+    .nav .nav-try { padding: 6px 12px; }
+    .hero { padding: 36px 0 28px; }
     .actions {
         flex-direction: column;
         align-items: stretch;
         max-width: 360px;
         margin: 0 auto;
     }
-    .product,
-    .panel { padding: 20px; }
+    .section { padding: 40px 0; }
+    .section-tight { padding: 12px 0 24px; }
+    .tiles { gap: 10px; }
+    .tile { padding: 16px 14px; border-radius: 16px; }
+    .tile-ic { width: 40px; height: 40px; border-radius: 12px; margin-bottom: 10px; }
+    .tile-ic svg { width: 22px; height: 22px; }
+    .tile h3 { font-size: 16px; }
+    .tile p { font-size: 14px; }
+    .cards,
+    .trust { grid-template-columns: minmax(0, 1fr); }
+    .faq summary { padding: 16px 18px; }
+    .faq details p { padding: 0 18px 18px; }
 }
 
-@media (max-width: 400px) {
-    .facts { grid-template-columns: 1fr; gap: 0; }
-    .facts dd { margin-bottom: 8px; }
+@media (max-width: 360px) {
+    .tiles { grid-template-columns: minmax(0, 1fr); }
 }
