@@ -341,6 +341,7 @@ h1, h2, h3 { color: var(--text); }
 .feature-flip .feature-text { order: 2; }
 .feature-ic { margin-bottom: 16px; }
 .feature h3 { font-size: clamp(22px, 0.8vw + 18px, 27px); line-height: 1.25; margin: 0 0 12px; }
+.feature h3 .chip { margin-left: 6px; vertical-align: 0.3em; }
 .feature p { color: var(--text-2); font-size: 17px; margin: 0 0 12px; }
 .feature .feature-note { font-size: 15px; }
 .shot { margin: 0; }
